@@ -1048,7 +1048,14 @@ $(document).ready(function() {
                         lineWidth: .5,
                         markerOptions: {
                             size: 2,
-                            color: 'orange' 
+                            color: 'blue' 
+                        }
+                    },
+                    {
+                        lineWidth: .5,
+                        markerOptions: {
+                            size: 2,
+                            color: 'LightGrey' 
                         }
                     },
                     {
@@ -1061,7 +1068,7 @@ $(document).ready(function() {
                 ],
                 legend: {
                     show: multi_plot,
-                    labels: ['adu5_A', 'adu5_B'],
+                    labels: ['adu5_A', 'adu5_B','g12'],
                     location: 'ne',
                     rowSpacing: '0px'
                 },
@@ -1109,8 +1116,21 @@ $(document).ready(function() {
                         element = data.data_b[i];
                         new_data_b.push([element[0] + timeZoneShift, element[1]]);
                     }
-                    datalist = [new_data_a, new_data_b];
-                }else{
+                    //Add g12 onto the plot
+            // $.getJSON('/api/' + ip_db + '/history/' + table_name + '/' + column_name + '/' + (end_time - length) + '/' + end_time, function(data) {
+            //     console.log(data);
+            //      new_data_c = [];
+            //         for (var i =0; i< data.data_c.length; i += step){
+            //             element = data.data_c[i];
+            //             new_data_c.push([element[0] + timeZoneShift, element[1]]);
+            //         }
+            //     }
+    
+                    //end to adding the g12
+
+                    datalist = [new_data_a, new_data_b, new_data_b];
+                }
+                else{
                     new_data = [];
                     for (var i =0; i< data.data.length; i += step){
                         element = data.data[i];
