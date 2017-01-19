@@ -1093,8 +1093,11 @@ $(document).ready(function() {
         }
 
         function replotTimeline (table_name, column_name, end_time, length) {
+            console.log(table_name);
+            console.log(column_name);
             $.getJSON('/api/' + ip_db + '/history/' + table_name + '/' + column_name + '/' + (end_time - length) + '/' + end_time, function(data) {
-                console.log(data);
+                datalist = [];
+                // console.log(data);
                 var step = 1;
                 if (data.data && data.data.length > 50000){
                     // step = data.data.length/5000;
@@ -1117,18 +1120,25 @@ $(document).ready(function() {
                         new_data_b.push([element[0] + timeZoneShift, element[1]]);
                     }
                     //Add g12 onto the plot
-            // $.getJSON('/api/' + ip_db + '/history/' + table_name + '/' + column_name + '/' + (end_time - length) + '/' + end_time, function(data) {
-            //     console.log(data);
-            //      new_data_c = [];
-            //         for (var i =0; i< data.data_c.length; i += step){
-            //             element = data.data_c[i];
-            //             new_data_c.push([element[0] + timeZoneShift, element[1]]);
-            //         }
-            //     }
+                    new_data_c = [];
+                    columns = column_name.split('_');
+                    new_column_name = columns[0] + '_g12_pos';
+                    $.getJSON('/api/' + ip_db + '/history/' + 'gps' + '/' + new_column_name + '/' + (end_time - length) + '/' + end_time, function(data) {
+                        console.log(data);
+                            for (var i =0; i< data.data.length; i += step){
+                                element = data.data[i];
+                                new_data_c.push([element[0] + timeZoneShift, element[1]]);
+                            }
+                            datalist = [new_data_a, new_data_b, new_data_c];
+                            console.log(datalist);
+                            plot1.replot({
+                                data: datalist
+                            });
+                    });
     
                     //end to adding the g12
 
-                    datalist = [new_data_a, new_data_b, new_data_b];
+                    
                 }
                 else{
                     new_data = [];
@@ -1136,13 +1146,14 @@ $(document).ready(function() {
                         element = data.data[i];
                         new_data.push([element[0] + timeZoneShift, element[1]]);
                     }
-                    console.log(data.data.length);
+                    // console.log(data.data.length);
                     datalist = [new_data];
+                    console.log(datalist);
+                    plot1.replot({
+                        data: datalist
+                    });
                 }
-                console.log(datalist);
-                plot1.replot({
-                    data: datalist
-                });
+                
             });
 
         }
