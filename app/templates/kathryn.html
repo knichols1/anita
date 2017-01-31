@@ -200,6 +200,7 @@
         <ul class="nav navbar-top-links">
             <span>Zoom Depth:</span>  <span id = 'zoomIndex'>1/1</span>
             <li><button type="button" id='reset' class="btn btn-success btn-xs">Reset</button> </li>
+            <li><button type="button" id='differnece' class="btn btn-success btn-xs">Difference</button> </li>
             <li><button type="button" id='undo' class="btn btn-success btn-xs">Undo</button> </li>
             <li><button type="button" id='redo' class="btn btn-success btn-xs">Redo</button> </li>
             <li><button type="button" id='1hour' class="btn btn-success btn-xs">1Hour</button> </li>
@@ -1120,12 +1121,35 @@ $(document).ready(function() {
                         new_data_b.push([element[0] + timeZoneShift, element[1]]);
                     }
                     //Add g12 onto the plot
-                    
+
+                    a_data = [];
+                    b_data = [];
                     new_data_d = [];
-                    for (var i =0; i< data.data_a.length; i += step){
-                        element = data.data_a[i] - data.data_b[i];
-                        new_data_a.push([element[0] + timeZoneShift, element[1]]);
+
+                    for ( var i=0; i< new_data_a.length; i+= step){
+                        a_data[i] = new_data_a[i][1];
                     }
+
+                    for ( var i=0; i< new_data_b.length; i+= step){
+                        b_data[i] = new_data_b[i][1];
+                    }
+
+                    // for (var i=0; i< new_data_a.length; i+= step){
+                    //    new_data_d[i] = a_data[i] - b_data[i];
+                    // }
+
+                    for ( var i=0; i< new_data_a.length && i< new_data_b.length ; i+= step){
+                        new_data_d.push([new_data_a[i][0], new_data_a[i][1] - new_data_b[i][1]]) ;
+                    }
+
+
+                    console.log("a_data");
+                    console.log(a_data);
+                    console.log("b_data");
+                    console.log(b_data);
+
+                    console.log("This is the difference");
+                    console.log(new_data_d);
 
                     new_data_c = [];
                     columns = column_name.split('_');
@@ -1163,6 +1187,7 @@ $(document).ready(function() {
                 
             });
 
+
         }
 
         $("#dialog_" + name).on('jqplotZoom', function(ev, gridpos, datapos, plot, cursor){
@@ -1187,7 +1212,11 @@ $(document).ready(function() {
             $("#dialog_" + name).find('button[id="request"]').trigger("click");
             $("#dialog_" + name + " #zoomIndex").text('1/1');
         });
-        
+        $("#dialog_" + name + " #Difference").click(function() {
+            console.log("This worked");
+            
+        });
+
 
         $("#dialog_" + name + " #undo").click(function() {
             if ($("#dialog_" + name).data('zoomStack').length > 1){
